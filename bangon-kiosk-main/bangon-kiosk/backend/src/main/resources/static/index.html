@@ -1,0 +1,3055 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bangon Kiosk</title>
+    <style>
+      :root {
+        --brown-900: #2f211b;
+        --brown-800: #3a2922;
+        --brown-700: #4a342a;
+        --brown-600: #6a4a3a;
+        --caramel: #b97745;
+        --caramel-dark: #9f6134;
+        --cream: #f6f0e8;
+        --offwhite: #fbf9f6;
+        --white: #ffffff;
+        --border: #e7ddd3;
+        --text: #2a2421;
+        --muted: #776d67;
+        --success: #35664a;
+        --warning: #9a6b1f;
+        --danger: #a64b41;
+        --shadow: 0 12px 34px rgba(62, 44, 34, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--offwhite);
+        color: var(--text);
+      }
+      body {
+        font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .screen {
+        display: none;
+        min-height: 100vh;
+      }
+      .screen.active {
+        display: block;
+      }
+
+      /* Welcome */
+      .welcome {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        background: var(--cream);
+      }
+      .welcome-copy {
+        padding: 70px 8vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--brown-900);
+        margin-bottom: 80px;
+      }
+      .brand-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--brown-900);
+        position: relative;
+      }
+      .brand-badge:before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 22px;
+        border: 3px solid var(--cream);
+        border-top-width: 6px;
+        border-radius: 4px 4px 9px 9px;
+        left: 10px;
+        top: 8px;
+      }
+      .brand-badge:after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border: 3px solid var(--cream);
+        border-left: 0;
+        border-radius: 0 8px 8px 0;
+        right: 5px;
+        top: 14px;
+      }
+      .brand-mark strong {
+        font-size: 22px;
+        letter-spacing: 0.3px;
+      }
+      .eyebrow {
+        color: var(--caramel-dark);
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1.7px;
+        font-weight: 800;
+      }
+      .welcome h1 {
+        font-family: Georgia, serif;
+        font-size: clamp(44px, 6vw, 76px);
+        line-height: 1.02;
+        margin: 10px 0 18px;
+        color: var(--brown-900);
+        max-width: 700px;
+      }
+      .welcome p {
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 560px;
+        line-height: 1.65;
+        margin: 0 0 34px;
+      }
+      .welcome-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        border: 0;
+        border-radius: 14px;
+        padding: 15px 22px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.18s ease;
+      }
+      .btn-primary {
+        background: var(--brown-900);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--brown-700);
+        transform: translateY(-1px);
+      }
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid #cdbfb3;
+        color: var(--brown-900);
+      }
+      .btn-secondary:hover {
+        background: #efe6dc;
+      }
+      .welcome-visual {
+        background:
+          linear-gradient(rgba(47, 33, 27, 0.18), rgba(47, 33, 27, 0.34)),
+          url("https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=85")
+            center/cover no-repeat;
+        position: relative;
+        overflow: hidden;
+      }
+      .table {
+        width: min(74%, 560px);
+        height: 58%;
+        background: linear-gradient(#c99b72, #b98660);
+        border-radius: 40px;
+        position: relative;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+      }
+      .cup-visual {
+        position: absolute;
+        width: 180px;
+        height: 220px;
+        background: #f3ede7;
+        border-radius: 18px 18px 58px 58px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -54%);
+        box-shadow: 0 28px 30px rgba(0, 0, 0, 0.2);
+      }
+      .cup-visual:before {
+        content: "";
+        width: 110px;
+        height: 18px;
+        border-radius: 50%;
+        background: #5c3728;
+        position: absolute;
+        left: 35px;
+        top: 17px;
+        box-shadow: inset 0 0 0 10px #d6b79e;
+      }
+      .cup-visual:after {
+        content: "";
+        position: absolute;
+        width: 70px;
+        height: 92px;
+        border: 16px solid #f3ede7;
+        border-left: 0;
+        border-radius: 0 50px 50px 0;
+        right: -58px;
+        top: 54px;
+      }
+      .saucer {
+        position: absolute;
+        width: 255px;
+        height: 48px;
+        border-radius: 50%;
+        background: #e4d5c7;
+        left: 50%;
+        top: 72%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 18px 20px rgba(0, 0, 0, 0.18);
+      }
+
+      /* Kiosk shell */
+      .kiosk {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: 78px 1fr;
+      }
+      .header {
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 26px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .logo-text {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+        color: var(--brown-900);
+        font-size: 20px;
+      }
+      .small-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--brown-900);
+        position: relative;
+        flex: 0 0 32px;
+      }
+      /* Same cup icon as the welcome screen logo, scaled to the smaller badge. */
+      .small-badge:before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 17px;
+        border: 2px solid var(--cream);
+        border-top-width: 5px;
+        border-radius: 3px 3px 7px 7px;
+        left: 8px;
+        top: 6px;
+      }
+      .small-badge:after {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border: 2px solid var(--cream);
+        border-left: 0;
+        border-radius: 0 6px 6px 0;
+        right: 4px;
+        top: 11px;
+      }
+      .header-note {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .cart-button {
+        border: 1px solid var(--border);
+        background: #fff;
+        border-radius: 14px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 800;
+        color: var(--brown-900);
+      }
+      .cart-count {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--caramel);
+        color: #fff;
+        font-size: 11px;
+        margin-left: 8px;
+      }
+
+      .menu-layout {
+        display: grid;
+        grid-template-columns: 230px 1fr 330px;
+        min-height: calc(100vh - 78px);
+      }
+      .sidebar {
+        background: var(--cream);
+        border-right: 1px solid var(--border);
+        padding: 24px 18px;
+      }
+      .side-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.3px;
+        color: var(--muted);
+        font-weight: 800;
+        margin: 4px 10px 14px;
+      }
+      .category {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: var(--brown-800);
+        padding: 14px 14px;
+        border-radius: 12px;
+        text-align: left;
+        cursor: pointer;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .category.active {
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(60, 42, 32, 0.06);
+      }
+      .category:hover {
+        background: #fff8f1;
+      }
+      .profile-summary {
+        margin-top: 26px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 15px;
+      }
+      .profile-summary small {
+        color: var(--muted);
+        display: block;
+        font-size: 11px;
+      }
+      .profile-summary strong {
+        display: block;
+        margin: 4px 0 10px;
+      }
+      .profile-line {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 5px 0;
+      }
+
+      .content {
+        padding: 30px;
+        overflow: auto;
+      }
+      .content-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .content h2 {
+        font-size: 30px;
+        margin: 0 0 6px;
+        color: var(--brown-900);
+      }
+      .content-top p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .search {
+        width: min(320px, 100%);
+        border: 1px solid var(--border);
+        background: #fff;
+        border-radius: 14px;
+        padding: 12px 14px;
+        outline: none;
+      }
+      .search:focus {
+        border-color: #bfa38d;
+        box-shadow: 0 0 0 3px rgba(185, 119, 69, 0.12);
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 18px;
+      }
+      .product-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+      }
+      .product-photo {
+        height: 170px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(145deg, #dcb895, #b67d56);
+      }
+      .product-photo.dark {
+        background: linear-gradient(145deg, #79503d, #3f2a21);
+      }
+      .product-photo.green {
+        background: linear-gradient(145deg, #b5b998, #7d8961);
+      }
+      .product-photo.pink {
+        background: linear-gradient(145deg, #e9c1bc, #ce8f8a);
+      }
+      .product-photo.gold {
+        background: linear-gradient(145deg, #e4bd77, #c8843f);
+      }
+      .glass {
+        position: absolute;
+        width: 82px;
+        height: 108px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -44%);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.3));
+        border: 2px solid rgba(255, 255, 255, 0.72);
+        border-radius: 8px 8px 22px 22px;
+        box-shadow: 0 16px 22px rgba(0, 0, 0, 0.16);
+      }
+      .glass:before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 20px;
+        bottom: 9px;
+        border-radius: 6px 6px 16px 16px;
+        background: linear-gradient(#f2e3cf 0 28%, #9b684b 28% 60%, #5a382a 60%);
+      }
+      .glass.tea:before {
+        background: linear-gradient(#e7ead7 0 30%, #93a372 30% 100%);
+      }
+      .glass.berry:before {
+        background: linear-gradient(#f8dedb 0 30%, #d58e89 30% 100%);
+      }
+      .pastry {
+        position: absolute;
+        left: 50%;
+        top: 54%;
+        transform: translate(-50%, -50%) rotate(-5deg);
+        width: 112px;
+        height: 66px;
+        border-radius: 55% 55% 45% 45%;
+        background: linear-gradient(#efc270, #b96f35);
+        box-shadow: 0 16px 20px rgba(0, 0, 0, 0.18);
+      }
+      .pastry:before,
+      .pastry:after {
+        content: "";
+        position: absolute;
+        width: 46px;
+        height: 5px;
+        border-radius: 99px;
+        background: rgba(116, 63, 30, 0.25);
+        left: 32px;
+      }
+      .pastry:before {
+        top: 20px;
+        transform: rotate(12deg);
+      }
+      .pastry:after {
+        top: 35px;
+        transform: rotate(-10deg);
+      }
+      .product-info {
+        padding: 15px 15px 16px;
+      }
+      .product-name {
+        font-weight: 900;
+        margin: 0 0 5px;
+        color: var(--brown-900);
+      }
+      .product-meta {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+        min-height: 36px;
+      }
+      .product-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .product-price {
+        font-weight: 900;
+        color: var(--brown-700);
+        font-size: 17px;
+      }
+      .add {
+        border: 0;
+        background: var(--brown-900);
+        color: #fff;
+        border-radius: 10px;
+        padding: 9px 13px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .add:hover {
+        background: var(--brown-700);
+      }
+
+      /* Cart */
+      .cart-panel {
+        background: #fff;
+        border-left: 1px solid var(--border);
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .cart-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .cart-title h3 {
+        margin: 0;
+        font-size: 22px;
+        color: var(--brown-900);
+      }
+      .cart-title span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .cart-items {
+        flex: 1;
+        overflow: auto;
+        margin: 18px 0;
+        min-height: 150px;
+      }
+      .empty {
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+        padding: 44px 10px;
+        border: 1px dashed #dbcfc4;
+        border-radius: 14px;
+        background: #fcfaf8;
+      }
+      .cart-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #eee6df;
+      }
+      .cart-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .cart-item-name {
+        font-weight: 800;
+        font-size: 13px;
+      }
+      .cart-item small {
+        display: block;
+        color: var(--muted);
+        margin-top: 4px;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .remove {
+        border: 0;
+        background: transparent;
+        color: var(--danger);
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .notice {
+        padding: 11px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        line-height: 1.45;
+        margin-bottom: 9px;
+      }
+      .notice.warn {
+        background: #fbf5e9;
+        border: 1px solid #ead6ad;
+        color: #805a1b;
+      }
+      .notice.alert {
+        background: #fbefed;
+        border: 1px solid #e8c5bf;
+        color: #8a433b;
+      }
+      .notice.good {
+        background: #edf5ef;
+        border: 1px solid #cfe2d4;
+        color: #315b40;
+      }
+
+      .summary {
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+      }
+      .summary-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin: 7px 0;
+        color: var(--muted);
+      }
+      .summary-line.total {
+        font-size: 20px;
+        color: var(--brown-900);
+        font-weight: 900;
+        margin-top: 14px;
+      }
+      .checkout-btn {
+        width: 100%;
+        margin-top: 14px;
+        border: 0;
+        border-radius: 13px;
+        padding: 14px;
+        background: var(--caramel);
+        color: white;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .checkout-btn:hover {
+        background: var(--caramel-dark);
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(39, 29, 24, 0.5);
+        display: none;
+        place-items: center;
+        padding: 20px;
+        z-index: 30;
+      }
+      .modal.show {
+        display: grid;
+      }
+      .modal-card {
+        width: min(620px, 100%);
+        max-height: 92vh;
+        overflow: auto;
+        background: #fff;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+      }
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .modal-head h3 {
+        margin: 0;
+        font-size: 25px;
+        color: var(--brown-900);
+      }
+      .modal-head p {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .close {
+        border: 0;
+        background: #f2ece7;
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+      }
+      .custom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 20px;
+      }
+      .field label,
+      .group-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--brown-800);
+      }
+      select {
+        width: 100%;
+        margin-top: 6px;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        padding: 11px;
+        background: #fff;
+        color: var(--text);
+      }
+      .checks {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .check {
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .check span {
+        font-size: 13px;
+      }
+      .wellness {
+        margin-top: 18px;
+        background: #faf7f3;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+      }
+      .wellness-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .wellness strong {
+        font-size: 13px;
+      }
+      .price-live {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--brown-900);
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      /* Checkout + confirmation */
+      .simple-screen {
+        min-height: 100vh;
+        background: var(--cream);
+        padding: 34px;
+      }
+      .simple-wrap {
+        max-width: 780px;
+        margin: auto;
+      }
+      .back-link {
+        border: 0;
+        background: transparent;
+        color: var(--brown-700);
+        font-weight: 800;
+        cursor: pointer;
+        padding: 0;
+      }
+      .simple-card {
+        margin-top: 20px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 26px;
+        box-shadow: var(--shadow);
+      }
+      .simple-card h2 {
+        margin: 0 0 6px;
+        font-size: 30px;
+        color: var(--brown-900);
+      }
+      .simple-card .sub {
+        color: var(--muted);
+        margin: 0 0 24px;
+      }
+      .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .pay-option {
+        border: 1px solid var(--border);
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px;
+        cursor: pointer;
+        text-align: left;
+        font-weight: 800;
+        color: var(--brown-800);
+      }
+      .pay-option.active {
+        border-color: var(--caramel);
+        box-shadow: 0 0 0 3px rgba(185, 119, 69, 0.12);
+      }
+      .pay-option small {
+        display: block;
+        color: var(--muted);
+        font-weight: 500;
+        margin-top: 5px;
+      }
+      .loyalty-box {
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 14px;
+        background: #faf7f3;
+        border: 1px solid var(--border);
+      }
+      .loyalty-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+      }
+      .loyalty-link {
+        border: 0;
+        background: transparent;
+        color: var(--brown-700);
+        font-weight: 800;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        padding: 3px 0;
+        text-align: left;
+      }
+      .loyalty-link:hover,
+      .loyalty-link:focus-visible {
+        color: var(--caramel-dark);
+      }
+      .loyalty-balance {
+        font-size: 34px;
+        font-weight: 900;
+        color: var(--brown-900);
+        margin: 12px 0 4px;
+      }
+      .loyalty-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .loyalty-notice {
+        background: var(--cream);
+        border-radius: 12px;
+        padding: 12px;
+        margin-top: 14px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .place-order {
+        width: 100%;
+        border: 0;
+        border-radius: 14px;
+        padding: 15px;
+        background: var(--brown-900);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .confirmation {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 30px;
+        background: var(--cream);
+      }
+      .confirmation-card {
+        width: min(600px, 100%);
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 34px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .checkmark {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 18px;
+        background: #eaf3ed;
+        color: var(--success);
+        font-size: 34px;
+        font-weight: 900;
+      }
+      .confirmation h2 {
+        font-size: 32px;
+        margin: 0 0 8px;
+        color: var(--brown-900);
+      }
+      .order-number {
+        font-size: 18px;
+        font-weight: 900;
+        margin: 12px 0;
+      }
+      .receipt {
+        text-align: left;
+        background: #faf7f3;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        margin: 22px 0;
+      }
+
+      @media (max-width: 900px) {
+        .menu-layout {
+          grid-template-columns: 190px 1fr;
+        }
+        .cart-panel {
+          grid-column: 1/-1;
+          border-left: 0;
+          border-top: 1px solid var(--border);
+          min-height: 420px;
+        }
+      }
+      @media (max-width: 760px) {
+        .welcome {
+          grid-template-columns: 1fr;
+        }
+        .welcome-visual {
+          display: none;
+        }
+        .welcome-copy {
+          padding: 42px 24px;
+        }
+        .brand-mark {
+          margin-bottom: 50px;
+        }
+        .menu-layout {
+          display: block;
+        }
+        .sidebar {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .sidebar .side-title,
+        .profile-summary {
+          display: none;
+        }
+        .sidebar {
+          display: flex;
+          gap: 8px;
+          overflow: auto;
+          padding: 12px;
+        }
+        .category {
+          min-width: max-content;
+          margin: 0;
+          background: #fff;
+          border: 1px solid var(--border);
+        }
+        .content {
+          padding: 20px 14px;
+        }
+        .content-top {
+          display: block;
+        }
+        .search {
+          margin-top: 15px;
+          width: 100%;
+        }
+        .product-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .custom-grid,
+        .payment-grid {
+          grid-template-columns: 1fr;
+        }
+        .header-note {
+          display: none;
+        }
+      }
+      @media (max-width: 520px) {
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+        .header {
+          padding: 0 14px;
+        }
+        .simple-screen {
+          padding: 20px 14px;
+        }
+      }
+
+      /* Order history */
+      .history-list {
+        display: grid;
+        gap: 13px;
+        margin-top: 22px;
+      }
+      .history-order {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+      }
+      .history-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .history-details {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .history-state {
+        font-size: 12px;
+        font-weight: 800;
+        background: var(--cream);
+        border-radius: 99px;
+        padding: 5px 10px;
+      }
+      .history-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      /* Accessible authentication and profile dialogs */
+      .auth-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(30, 20, 16, 0.65);
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .auth-backdrop.show {
+        display: flex;
+      }
+      .auth-card {
+        width: min(440px, 100%);
+        max-height: 94vh;
+        overflow: auto;
+        background: white;
+        border-radius: 22px;
+        padding: 28px;
+        box-shadow: 0 30px 75px #0004;
+      }
+      .auth-heading {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .auth-heading h2 {
+        font-family: Georgia, serif;
+        font-size: 30px;
+        color: var(--brown-900);
+        margin: 0;
+      }
+      .auth-muted {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--muted);
+        margin: 10px 0 20px;
+      }
+      .form-field {
+        display: block;
+        margin: 14px 0;
+        color: var(--brown-800);
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .form-field input {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        color: var(--text);
+        background: white;
+      }
+      .form-field input:focus {
+        outline: 2px solid #c69572;
+        outline-offset: 1px;
+      }
+      .auth-submit {
+        width: 100%;
+        margin-top: 14px;
+      }
+      .auth-submit:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+      .auth-switch {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .link-button {
+        border: 0;
+        background: transparent;
+        color: var(--caramel-dark);
+        font-weight: 800;
+        cursor: pointer;
+        text-decoration: underline;
+        padding: 5px;
+      }
+      .form-alert {
+        padding: 12px;
+        border-radius: 11px;
+        margin-top: 14px;
+        font-size: 13px;
+        line-height: 1.5;
+        background: #fbefed;
+        color: #873d35;
+        border: 1px solid #e8c5bf;
+      }
+      .form-alert:empty {
+        display: none;
+      }
+      .profile-actions {
+        margin-top: 12px;
+      }
+      .profile-summary button {
+        font-size: 12px;
+      }
+      .status-banner {
+        margin: 10px 0;
+        padding: 12px;
+        border-radius: 10px;
+        background: #fff3dd;
+        color: #704a17;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .status-banner:empty {
+        display: none;
+      }
+      .hidden {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .sidebar .profile-summary {
+          display: block;
+          min-width: 215px;
+          margin: 0;
+        }
+        .auth-card {
+          padding: 20px;
+        }
+      }
+
+      .welcome-visual .table,
+      .welcome-visual .saucer,
+      .welcome-visual .cup-visual {
+        display: none !important;
+      }
+
+      .product-photo {
+        background: #ece5de !important;
+      }
+      .product-photo img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+      }
+      .product-card:hover .product-photo img {
+        transform: scale(1.035);
+      }
+      .image-credit {
+        margin-top: 20px;
+        font-size: 10px;
+        color: #93877f;
+        line-height: 1.5;
+      }
+
+      /* Bangon wellness experience */
+      .health-card {
+        background: #faf7f2;
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 16px;
+        margin: 14px 0;
+      }
+      .health-card h4 {
+        margin: 0 0 10px;
+        color: var(--brown-900);
+      }
+      .health-meter {
+        margin: 12px 0;
+      }
+      .health-meter-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+        margin-bottom: 7px;
+      }
+      .health-track {
+        height: 9px;
+        border-radius: 30px;
+        background: #e7ded4;
+        overflow: hidden;
+      }
+      .health-fill {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: #698d74;
+        border-radius: 30px;
+        transition: width 0.2s;
+      }
+      .health-fill.over {
+        background: #aa5b40;
+      }
+      .health-fill.near {
+        background: #c69546;
+      }
+      .health-caption {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin-top: 7px;
+      }
+      .wellness-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 12px;
+      }
+      .wellness-actions button {
+        border: 1px solid #cdbfb3;
+        border-radius: 11px;
+        background: white;
+        color: var(--brown-900);
+        padding: 9px 13px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .health-panel-body {
+        max-height: 66vh;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+      .health-panel-body h3 {
+        font-size: 15px;
+        margin: 20px 0 6px;
+        color: var(--brown-900);
+      }
+      .health-lede {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .health-panel-body .form-field {
+        margin-top: 12px;
+      }
+      .health-panel-body .form-field input[type="checkbox"] {
+        width: auto;
+        vertical-align: middle;
+        margin: 0 8px 0 0;
+      }
+      .health-panel-body .form-field small {
+        font-weight: 400;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .health-footer {
+        display: flex;
+        gap: 9px;
+        margin-top: 14px;
+      }
+      .health-footer .btn {
+        flex: 1;
+      }
+      .health-simple {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: var(--cream);
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--brown-700);
+      }
+      .health-feedback {
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .health-feedback:empty {
+        display: none;
+      }
+      .health-chip {
+        font-size: 11px;
+        font-weight: 700;
+        border: 1px solid #d8c9b9;
+        border-radius: 20px;
+        padding: 5px 9px;
+        background: #fff;
+      }
+      .catalog-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin: 0 0 17px;
+      }
+      .catalog-filters button {
+        border: 1px solid var(--border);
+        background: #fff;
+        padding: 8px 11px;
+        border-radius: 99px;
+        color: var(--brown-700);
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .catalog-filters button.active {
+        background: var(--brown-900);
+        color: #fff;
+      }
+      @media (max-width: 760px) {
+        .health-footer {
+          flex-direction: column;
+        }
+        .health-panel-body {
+          max-height: 60vh;
+        }
+      }
+
+      /* Modal usability corrections: scoped to account and health dialogs. */
+      .auth-backdrop {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: clamp(12px, 3vh, 24px);
+      }
+      .auth-backdrop.show {
+        align-items: center;
+      }
+      .auth-card {
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+        max-height: calc(100dvh - 32px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+      }
+      .auth-heading {
+        align-items: center;
+        min-width: 0;
+      }
+      .auth-heading h2 {
+        min-width: 0;
+        overflow-wrap: break-word;
+        font-size: clamp(23px, 5vw, 30px);
+        line-height: 1.2;
+      }
+      .auth-heading .close {
+        flex: 0 0 36px;
+        min-width: 36px;
+        min-height: 36px;
+        display: grid;
+        place-items: center;
+      }
+      .auth-card .form-field {
+        min-width: 0;
+      }
+      .auth-card .form-field input:not([type="checkbox"]) {
+        max-width: 100%;
+        min-width: 0;
+      }
+      .password-control {
+        position: relative;
+        margin-top: 6px;
+      }
+      .auth-card .form-field .password-control input {
+        margin-top: 0;
+        padding-right: 52px;
+      }
+      .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 6px;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--brown-700);
+        cursor: pointer;
+      }
+      .password-toggle:hover {
+        background: var(--cream);
+      }
+      .password-toggle:focus-visible {
+        outline: 2px solid var(--caramel);
+        outline-offset: 1px;
+      }
+      .password-toggle svg {
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .field-error {
+        display: block;
+        margin-top: 6px;
+        color: var(--danger);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .field-error:empty {
+        display: none;
+      }
+      .auth-card input[aria-invalid="true"] {
+        border-color: var(--danger);
+        outline-color: var(--danger);
+      }
+      .health-panel-body {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        min-width: 0;
+      }
+      .health-panel-body .dietary-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        max-width: 100%;
+        padding: 10px 2px;
+        margin: 6px 0 12px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+      .health-panel-body .dietary-check input[type="checkbox"] {
+        display: block;
+        flex: 0 0 19px;
+        width: 19px;
+        height: 19px;
+        margin: 0;
+        accent-color: var(--brown-900);
+        cursor: pointer;
+      }
+      .health-panel-body .dietary-check span {
+        display: block;
+        min-width: 0;
+      }
+      .health-footer {
+        flex-wrap: wrap;
+      }
+      .health-footer .btn {
+        min-width: 0;
+      }
+      @media (max-width: 520px) {
+        .auth-backdrop {
+          padding: 10px;
+          align-items: center;
+        }
+        .auth-card {
+          padding: 20px 16px;
+          max-height: calc(100dvh - 20px);
+          border-radius: 17px;
+        }
+        .health-footer {
+          flex-direction: column;
+        }
+        .health-footer .btn {
+          width: 100%;
+        }
+      }
+
+      /* Welcome screen: spacing scales with screen height so it always fits without scrolling. */
+      .welcome-copy {
+        padding: clamp(24px, 6vh, 70px) 8vw;
+      }
+      .brand-mark {
+        margin-bottom: clamp(24px, 8vh, 80px);
+      }
+      .welcome h1 {
+        font-size: clamp(40px, min(6vw, 9vh), 76px);
+      }
+      .welcome p {
+        margin-bottom: clamp(20px, 4vh, 34px);
+      }
+
+      /* Kiosk layout: the page stays fixed; sidebar, products and cart scroll on their own. */
+      @media (min-width: 901px) {
+        #menuScreen.active {
+          height: 100vh;
+          min-height: 0;
+          overflow: hidden;
+        }
+        .menu-layout {
+          grid-template-columns: 210px 1fr 310px;
+          height: calc(100vh - 78px);
+          min-height: 0;
+        }
+        .sidebar,
+        .content,
+        .cart-panel {
+          min-height: 0;
+          overflow-y: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="welcomeScreen" class="screen active">
+      <div class="welcome">
+        <div class="welcome-copy">
+          <div class="brand-mark">
+            <div class="brand-badge"></div>
+            <strong>Bangon Kiosk</strong>
+          </div>
+
+          <div class="eyebrow">Fresh coffee, made your way</div>
+          <h1>Good morning. What would you like today?</h1>
+          <p>
+            Order your usual, try something new, or sign in to view caffeine, calorie, allergen and
+            loyalty information while you order.
+          </p>
+
+          <div class="welcome-actions">
+            <button class="btn btn-primary" onclick="startOrder()">Start Order</button>
+            <button class="btn btn-secondary" onclick="openAuth('login')">Login / Register</button>
+          </div>
+        </div>
+
+        <div class="welcome-visual">
+          <div class="table"></div>
+          <div class="saucer"></div>
+          <div class="cup-visual"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menuScreen" class="screen">
+      <div class="kiosk">
+        <header class="header">
+          <div class="header-left">
+            <div class="logo-text">
+              <div class="small-badge"></div>
+              Bangon
+            </div>
+            <div class="header-note" id="loginStatus">Guest order</div>
+          </div>
+          <div class="header-actions">
+            <button
+              class="cart-button"
+              id="historyButton"
+              onclick="openOrderHistory()"
+              style="display: none"
+            >
+              Order History
+            </button>
+            <button class="cart-button" id="accountButton" onclick="accountAction()">
+              Account
+            </button>
+            <button class="cart-button" onclick="focusCart()">
+              Cart <span id="headerCartCount" class="cart-count">0</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="menu-layout">
+          <aside class="sidebar">
+            <div class="side-title">Menu</div>
+            <div id="categoryNav"></div>
+
+            <div class="profile-summary">
+              <small>Signed-in profile</small>
+              <strong id="profileName">Guest</strong>
+              <div class="profile-line">
+                Caffeine limit: <span id="sideCaffeineLimit">400</span> mg
+              </div>
+              <div class="profile-line">
+                Calorie goal: <span id="sideCalorieGoal">2,000</span> kcal
+              </div>
+              <div class="profile-line">
+                Lactose intolerance: <span id="sideLactose">Not set</span>
+              </div>
+              <div class="profile-actions">
+                <button class="link-button" onclick="openProfileSettings()">
+                  Edit preferences
+                </button>
+              </div>
+              <div class="profile-line">
+                <button type="button" class="loyalty-link" onclick="openLoyalty()">
+                  Loyalty points: <span id="sidePoints">0</span> ↗
+                </button>
+              </div>
+            </div>
+          </aside>
+
+          <main class="content">
+            <div class="content-top">
+              <div>
+                <h2 id="categoryTitle">Coffee</h2>
+                <p>Choose an item to customize or add it directly to your order.</p>
+              </div>
+              <input
+                id="searchInput"
+                class="search"
+                type="search"
+                placeholder="Search drinks or pastries"
+                oninput="renderProducts()"
+              />
+            </div>
+
+            <div class="catalog-filters" role="group" aria-label="Nutrition filters">
+              <button
+                type="button"
+                id="filterAll"
+                class="active"
+                onclick="setNutritionFilter('all')"
+              >
+                All drinks
+              </button>
+              <button type="button" id="filterCaffeine" onclick="setNutritionFilter('caffeine')">
+                Lower caffeine ≤ 80 mg
+              </button>
+              <button type="button" id="filterCalories" onclick="setNutritionFilter('calories')">
+                Lower calorie ≤ 150 kcal
+              </button>
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+          </main>
+
+          <aside class="cart-panel" id="cartPanel">
+            <div class="cart-title">
+              <h3>Your order</h3>
+              <span id="itemCountText">0 items</span>
+            </div>
+
+            <div class="health-card" aria-live="polite">
+              <h4>Today's order · nutrition estimate</h4>
+              <div class="health-meter">
+                <div class="health-meter-head">
+                  <span>Caffeine</span><strong id="cartCaffeineMeter">0 / 400 mg</strong>
+                </div>
+                <div class="health-track">
+                  <span class="health-fill" id="cartCaffeineFill"></span>
+                </div>
+              </div>
+              <div class="health-meter">
+                <div class="health-meter-head">
+                  <span>Calories</span><strong id="cartCalorieMeter">0 / 2,000 kcal</strong>
+                </div>
+                <div class="health-track">
+                  <span class="health-fill" id="cartCalorieFill"></span>
+                </div>
+              </div>
+              <div class="health-caption" id="cartNutritionNote">
+                Cart estimates only; this is not a record of what you've consumed.
+              </div>
+              <div class="wellness-actions">
+                <button type="button" onclick="openProfileSettings()">⚙ Health preferences</button>
+              </div>
+            </div>
+            <div id="healthNotices" aria-live="polite"></div>
+            <div id="cartItems" class="cart-items"></div>
+
+            <div class="summary">
+              <div class="summary-line">
+                <span>Caffeine</span><strong><span id="totalCaffeine">0</span> mg</strong>
+              </div>
+              <div class="summary-line">
+                <span>Calories</span><strong><span id="totalCalories">0</span> kcal</strong>
+              </div>
+              <div class="summary-line">
+                <span>Loyalty discount</span><strong id="discountText">₱0.00</strong>
+              </div>
+              <div class="summary-line total">
+                <span>Total</span><span id="totalPrice">₱0.00</span>
+              </div>
+              <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkoutScreen" class="screen">
+      <div class="simple-screen">
+        <div class="simple-wrap">
+          <button class="back-link" onclick="showScreen('menuScreen')">← Continue shopping</button>
+          <div class="simple-card">
+            <h2>Checkout</h2>
+            <p class="sub">Review your total and choose how you would like to pay.</p>
+
+            <div id="checkoutHealth" aria-live="polite"></div>
+            <div class="summary-line total">
+              <span>Order total</span><span id="checkoutTotal">₱0.00</span>
+            </div>
+
+            <h3 style="margin-top: 26px">Payment method</h3>
+            <div class="payment-grid">
+              <button class="pay-option active" data-method="Cash" onclick="selectPayment(this)">
+                Cash
+                <small>Pay at the counter</small>
+              </button>
+              <button class="pay-option" data-method="Card" onclick="selectPayment(this)">
+                Card
+                <small>Debit or credit card</small>
+              </button>
+              <button class="pay-option" data-method="E-Wallet" onclick="selectPayment(this)">
+                E-Wallet
+                <small>Scan a QR code</small>
+              </button>
+            </div>
+
+            <div class="loyalty-box">
+              <div class="loyalty-row">
+                <div>
+                  <button type="button" class="loyalty-link" onclick="openLoyalty()">
+                    Loyalty points ⓘ
+                  </button>
+                  <div style="font-size: 13px; color: var(--muted); margin-top: 4px">
+                    You have <span id="checkoutPoints">0</span> points.
+                  </div>
+                </div>
+                <label style="font-size: 13px; font-weight: 800">
+                  <input id="usePoints" type="checkbox" onchange="renderCheckout()" /> Use 100
+                  points
+                </label>
+              </div>
+              <div id="loyaltyHint" style="font-size: 12px; color: var(--muted); margin-top: 10px">
+                Use 100 points for ₱20 off.
+              </div>
+            </div>
+
+            <button class="place-order" onclick="placeOrder()">PLACE ORDER</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="confirmationScreen" class="screen">
+      <div class="confirmation">
+        <div class="confirmation-card">
+          <div class="checkmark">✓</div>
+          <h2>Order confirmed</h2>
+          <div class="order-number" id="orderNumber">Order #B102</div>
+          <p style="color: var(--muted)">
+            Estimated preparation time: <strong>8–10 minutes</strong>
+          </p>
+
+          <div class="receipt">
+            <div class="summary-line">
+              <span>Total paid</span><strong id="paidAmount">₱0.00</strong>
+            </div>
+            <div class="summary-line">
+              <span>Payment</span><strong id="paidMethod">Cash</strong>
+            </div>
+            <div class="summary-line">
+              <span>Points earned</span><strong id="earnedPoints">0</strong>
+            </div>
+          </div>
+
+          <p style="color: var(--muted)">Thank you for ordering at Bangon.</p>
+          <div class="history-actions" style="justify-content: center">
+            <button class="btn btn-primary" onclick="newOrder()">Start New Order</button
+            ><button
+              class="btn btn-secondary"
+              id="confirmationHistory"
+              onclick="openOrderHistory()"
+              style="display: none"
+            >
+              View Order History
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="historyScreen" class="screen">
+      <div class="simple-screen">
+        <div class="simple-wrap">
+          <button class="back-link" onclick="backToMenu()">← Back to menu</button>
+          <div class="simple-card">
+            <div class="history-top">
+              <div>
+                <h2>My Order History</h2>
+                <p class="sub" style="margin-bottom: 0">
+                  Orders saved to your account, including their payment status.
+                </p>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="loadOrderHistory()">
+                Refresh history
+              </button>
+            </div>
+            <div id="historyList" class="history-list" aria-live="polite">
+              <div class="empty">Loading orders…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="customModal" class="modal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h3 id="modalProductName">Caramel Latte</h3>
+            <p>Customize your drink before adding it to your cart.</p>
+          </div>
+          <button class="close" onclick="closeCustomize()">×</button>
+        </div>
+
+        <div class="custom-grid">
+          <div class="field">
+            <label>Size</label>
+            <select id="sizeSelect" onchange="updateCustomization()">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Milk</label>
+            <select id="milkSelect" onchange="updateCustomization()">
+              <option value="whole">Whole milk</option>
+              <option value="oat">Oat milk (+₱20)</option>
+              <option value="almond">Almond milk (+₱20)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Sweetness</label>
+            <select id="sweetSelect" onchange="updateCustomization()">
+              <option value="25">25%</option>
+              <option value="50">50%</option>
+              <option value="100" selected>100%</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="group-label">Add-ons</div>
+            <div class="checks">
+              <label class="check"
+                ><span>Extra shot (+₱30)</span
+                ><input id="extraShot" type="checkbox" onchange="updateCustomization()"
+              /></label>
+              <label class="check"
+                ><span>Caramel syrup (+₱20)</span
+                ><input id="caramelAdd" type="checkbox" onchange="updateCustomization()"
+              /></label>
+              <label class="check"
+                ><span>Whipped cream (+₱20)</span
+                ><input id="creamAdd" type="checkbox" onchange="updateCustomization()"
+              /></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="wellness">
+          <div class="wellness-top">
+            <div><strong>Caffeine:</strong> <span id="modalCaffeine">0</span> mg</div>
+            <div><strong>Calories:</strong> <span id="modalCalories">0</span> kcal</div>
+            <div class="price-live" id="modalPrice">₱0.00</div>
+          </div>
+          <div id="allergenMessage" style="margin-top: 12px"></div>
+          <div id="customHealthAdvice" class="health-feedback" aria-live="polite"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeCustomize()">Cancel</button>
+          <button class="btn btn-primary" onclick="addCustomizedItem()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="authBackdrop"
+      class="auth-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="authTitle"
+      onclick="if(event.target===this)closeAuth()"
+    >
+      <div class="auth-card">
+        <div class="auth-heading">
+          <h2 id="authTitle">Welcome back</h2>
+          <button type="button" class="close" aria-label="Close" onclick="closeAuth()">×</button>
+        </div>
+        <p id="authSubtitle" class="auth-muted">
+          Sign in to access loyalty points and your dietary preferences.
+        </p>
+        <form id="authForm" onsubmit="submitAuth(event)">
+          <label class="form-field hidden" id="nameField"
+            >Full name<input
+              id="authName"
+              type="text"
+              autocomplete="name"
+              minlength="2"
+              maxlength="100"
+          /></label>
+          <label class="form-field"
+            >Email address<input
+              id="authEmail"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength="254"
+              placeholder="you@example.com"
+          /></label>
+          <div class="form-field">
+            <label for="authPassword">Password</label>
+            <div class="password-control">
+              <input
+                id="authPassword"
+                type="password"
+                autocomplete="current-password"
+                oninput="if(authMode==='register')validatePasswordMatch()"
+                required
+                minlength="8"
+                placeholder="At least 8 characters"
+              /><button
+                class="password-toggle"
+                type="button"
+                aria-label="Show password"
+                aria-pressed="false"
+                aria-controls="authPassword"
+                onclick="togglePasswordVisibility('authPassword',this)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-field hidden" id="confirmPasswordField">
+            <label for="authConfirmPassword">Confirm Password</label>
+            <div class="password-control">
+              <input
+                id="authConfirmPassword"
+                type="password"
+                autocomplete="new-password"
+                minlength="8"
+                placeholder="Re-enter your password"
+                aria-describedby="passwordMismatch"
+                oninput="validatePasswordMatch()"
+              /><button
+                class="password-toggle"
+                type="button"
+                aria-label="Show confirm password"
+                aria-pressed="false"
+                aria-controls="authConfirmPassword"
+                onclick="togglePasswordVisibility('authConfirmPassword',this)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <span id="passwordMismatch" class="field-error" role="status" aria-live="polite"></span>
+          </div>
+          <div id="authError" class="form-alert" role="alert" aria-live="polite"></div>
+          <button id="authSubmit" class="btn btn-primary auth-submit" type="submit">Sign in</button>
+        </form>
+        <div class="auth-switch">
+          <span id="authSwitchText">New to Bangon?</span>
+          <button type="button" id="authSwitch" class="link-button" onclick="toggleAuth()">
+            Create an account
+          </button>
+        </div>
+        <div class="status-banner"></div>
+      </div>
+    </div>
+    <div
+      id="loyaltyBackdrop"
+      class="auth-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="loyaltyTitle"
+      onclick="if(event.target===this)closeLoyalty()"
+    >
+      <div class="auth-card">
+        <div class="auth-heading">
+          <h2 id="loyaltyTitle">My loyalty points</h2>
+          <button type="button" class="close" aria-label="Close" onclick="closeLoyalty()">×</button>
+        </div>
+        <p class="auth-muted">
+          Earn rewards on eligible purchases and redeem points when checking out.
+        </p>
+        <div class="loyalty-balance">
+          <span id="loyaltyBalance">0</span> <span style="font-size: 16px">points</span>
+        </div>
+        <div id="loyaltyNotice" class="loyalty-notice" aria-live="polite"></div>
+        <div class="loyalty-actions">
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="loyaltyGoCheckout"
+            onclick="goToLoyaltyCheckout()"
+          >
+            Go to checkout
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="closeLoyalty()">Close</button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="profileBackdrop"
+      class="auth-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="profileTitle"
+      onclick="if(event.target===this)closeProfileSettings()"
+    >
+      <div class="auth-card" style="max-width: 630px">
+        <div class="auth-heading">
+          <h2 id="profileTitle">My health preferences</h2>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close preferences"
+            onclick="closeProfileSettings()"
+          >
+            ×
+          </button>
+        </div>
+        <p class="health-lede">
+          Make every cup fit your preferences. We’ll suggest smaller or lower-caffeine choices when
+          your cart approaches your targets.
+        </p>
+        <div class="health-panel-body">
+          <div class="health-card">
+            <h4>Current order at a glance</h4>
+            <div id="profileOrderSnapshot" class="health-caption">No drinks in your cart.</div>
+          </div>
+          <form id="profileForm" onsubmit="saveProfileSettings(event)">
+            <h3>Daily nutrition targets</h3>
+            <label class="form-field"
+              >Caffeine limit · mg<input
+                id="editCaffeine"
+                type="number"
+                min="0"
+                max="2000"
+                step="1"
+                required
+              /><small
+                >400 mg/day is a general reference for many healthy adults, not an appropriate
+                target for everyone.</small
+              ></label
+            >
+            <label class="form-field"
+              >Calorie goal · kcal<input
+                id="editCalories"
+                type="number"
+                min="0"
+                max="10000"
+                step="1"
+                required
+              /><small
+                >Your goal is personal. Cart calories are only part of your daily intake.</small
+              ></label
+            >
+            <h3>Dietary preferences</h3>
+            <label class="dietary-check" for="editLactose"
+              ><input id="editLactose" type="checkbox" /><span>I am lactose intolerant</span></label
+            >
+            <div class="health-simple">
+              If you choose whole milk, we’ll suggest oat or almond milk. Other dairy ingredients,
+              including whipped cream, may still be present. These are not verified allergen-safe
+              alternatives.
+            </div>
+            <h3>How it works</h3>
+            <div class="health-simple">
+              Warnings appear as you customize drinks, add items and check out. They are advisory
+              and do not prevent checkout. Sugar grams, actual consumption and ingredient-level
+              allergen verification are not available in this version.
+            </div>
+            <div id="profileError" class="form-alert" role="alert" aria-live="polite"></div>
+            <div class="health-footer">
+              <button type="button" class="btn btn-secondary" onclick="resetHealthForm()">
+                Reset fields</button
+              ><button id="profileSave" class="btn btn-primary" type="submit">
+                Save preferences
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      let categoryLabels = ["Coffee", "Frappes", "Tea", "Pastries", "Desserts"];
+
+      let products = [];
+
+      const profile = {
+        loggedIn: false,
+        name: "Guest",
+        caffeineConsumedToday: 0,
+        calorieConsumedToday: 0,
+        caffeineLimit: 400,
+        calorieGoal: 2000,
+        lactoseIntolerant: false,
+        points: 0,
+      };
+
+      let activeCategory = "Coffee";
+      let cart = [];
+      let selectedProduct = null;
+      let paymentMethod = "Cash";
+      let nutritionFilter = "all";
+
+      function money(v) {
+        return "₱" + Number(v).toFixed(2);
+      }
+
+      function showScreen(id) {
+        document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        window.scrollTo(0, 0);
+      }
+
+      function startOrder() {
+        showScreen("menuScreen");
+        loadMenu();
+      }
+
+      let authMode = "login";
+      function openAuth(mode = "login") {
+        authMode = mode;
+        const registering = mode === "register";
+        document.getElementById("authTitle").textContent = registering
+          ? "Create your account"
+          : "Welcome back";
+        document.getElementById("authSubtitle").textContent = registering
+          ? "Register to save dietary preferences and earn loyalty points."
+          : "";
+        document.getElementById("nameField").classList.toggle("hidden", !registering);
+        document.getElementById("authName").required = registering;
+        document.getElementById("authPassword").autocomplete = registering
+          ? "new-password"
+          : "current-password";
+        document.getElementById("confirmPasswordField").classList.toggle("hidden", !registering);
+        document.getElementById("authConfirmPassword").required = registering;
+        document.getElementById("authConfirmPassword").setCustomValidity("");
+        document.getElementById("passwordMismatch").textContent = "";
+        document.getElementById("authConfirmPassword").removeAttribute("aria-invalid");
+        document.getElementById("authSubmit").textContent = registering
+          ? "Create account"
+          : "Sign in";
+        document.getElementById("authSwitchText").textContent = registering
+          ? "Already a member?"
+          : "New to Bangon?";
+        document.getElementById("authSwitch").textContent = registering
+          ? "Sign in"
+          : "Create an account";
+        document.getElementById("authError").textContent = "";
+        document.getElementById("authError").style.display = "";
+        document.getElementById("authBackdrop").classList.add("show");
+        document.getElementById("authEmail").focus();
+      }
+      function closeAuth() {
+        document.getElementById("authBackdrop").classList.remove("show");
+        document.getElementById("authForm").reset();
+        document.getElementById("passwordMismatch").textContent = "";
+        document.getElementById("authConfirmPassword").setCustomValidity("");
+        document.getElementById("authConfirmPassword").removeAttribute("aria-invalid");
+        document.querySelectorAll("#authForm .password-toggle").forEach((button) => {
+          const input = document.getElementById(button.getAttribute("aria-controls"));
+          input.type = "password";
+          button.setAttribute("aria-pressed", "false");
+          button.setAttribute(
+            "aria-label",
+            input.id === "authPassword" ? "Show password" : "Show confirm password",
+          );
+        });
+      }
+      function togglePasswordVisibility(id, button) {
+        const input = document.getElementById(id);
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        button.setAttribute("aria-pressed", String(show));
+        button.setAttribute(
+          "aria-label",
+          (show ? "Hide " : "Show ") + (id === "authPassword" ? "password" : "confirm password"),
+        );
+      }
+      function validatePasswordMatch(force = false) {
+        const confirm = document.getElementById("authConfirmPassword");
+        const mismatch =
+          authMode === "register" &&
+          confirm.value !== document.getElementById("authPassword").value;
+        const display = mismatch && (force || confirm.value.length > 0);
+        confirm.setCustomValidity(display ? "Passwords do not match." : "");
+        confirm.setAttribute("aria-invalid", String(display));
+        document.getElementById("passwordMismatch").textContent = display
+          ? "Passwords do not match. Please try again."
+          : "";
+        return !mismatch;
+      }
+
+      function toggleAuth() {
+        openAuth(authMode === "login" ? "register" : "login");
+      }
+      function loginDemo() {
+        openAuth("login");
+      }
+      function registerMember() {
+        openAuth("register");
+      }
+      async function submitAuth(event) {
+        event.preventDefault();
+        const btn = document.getElementById("authSubmit");
+        const err = document.getElementById("authError");
+        const email = document.getElementById("authEmail").value.trim();
+        const password = document.getElementById("authPassword").value;
+        const payload =
+          authMode === "register"
+            ? { name: document.getElementById("authName").value.trim(), email, password }
+            : { email, password };
+        if (authMode === "register" && payload.name.length < 2) {
+          err.textContent = "Please enter your full name.";
+          return;
+        }
+        if (authMode === "register" && !validatePasswordMatch(true)) {
+          err.textContent = "Please make sure both passwords match.";
+          return;
+        }
+        btn.disabled = true;
+        err.textContent = "";
+        try {
+          await api(authMode === "register" ? "/api/auth/register" : "/api/auth/login", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
+          if (authMode === "register") {
+            openAuth("login");
+            document.getElementById("authEmail").value = email;
+            document.getElementById("authSubtitle").textContent =
+              "Account created! Please sign in.";
+          } else {
+            await loadProfile();
+            closeAuth();
+            await startOrder();
+          }
+        } catch (e) {
+          err.style.display = "block";
+          err.textContent = e.message;
+        } finally {
+          btn.disabled = false;
+        }
+      }
+      async function loadProfile() {
+        try {
+          const p = await api("/api/customers/me");
+          Object.assign(profile, {
+            loggedIn: true,
+            name: p.name,
+            points: p.points ?? 0,
+            caffeineLimit: p.caffeineLimit ?? 400,
+            calorieGoal: p.calorieGoal ?? 2000,
+            lactoseIntolerant: !!p.lactoseIntolerant,
+          });
+        } catch (e) {
+          profile.loggedIn = false;
+          profile.name = "Guest";
+          profile.points = 0;
+          profile.caffeineLimit = 400;
+          profile.calorieGoal = 2000;
+          profile.lactoseIntolerant = false;
+        }
+        renderProfile();
+      }
+      function renderProfile() {
+        document.getElementById("profileName").textContent = profile.name;
+        document.getElementById("loginStatus").textContent = profile.loggedIn
+          ? "Signed in as " + profile.name
+          : "Guest order";
+        document.getElementById("sidePoints").textContent = profile.points;
+        document.getElementById("sideCaffeineLimit").textContent = profile.caffeineLimit;
+        document.getElementById("sideCalorieGoal").textContent = Number(
+          profile.calorieGoal,
+        ).toLocaleString();
+        document.getElementById("sideLactose").textContent = profile.loggedIn
+          ? profile.lactoseIntolerant
+            ? "Yes"
+            : "No"
+          : "Sign in to configure";
+        document.getElementById("accountButton").textContent = profile.loggedIn
+          ? "Sign out"
+          : "Sign in";
+        document.getElementById("historyButton").style.display = profile.loggedIn ? "" : "none";
+        document.getElementById("confirmationHistory").style.display = profile.loggedIn
+          ? ""
+          : "none";
+        document.querySelector(".profile-actions button").textContent = profile.loggedIn
+          ? "Edit preferences"
+          : "Sign in to set limits";
+      }
+      function openLoyalty() {
+        document.getElementById("loyaltyBalance").textContent = Number(
+          profile.points || 0,
+        ).toLocaleString();
+        const note = document.getElementById("loyaltyNotice");
+        const checkout = document.getElementById("loyaltyGoCheckout");
+        if (!profile.loggedIn) {
+          note.textContent =
+            "Sign in to view your points and unlock loyalty rewards. Guest orders do not earn points.";
+          checkout.textContent = "Sign in";
+          checkout.disabled = false;
+        } else {
+          const available = Number(profile.points || 0);
+          note.textContent =
+            available >= 100
+              ? "You can redeem 100 points for ₱20 off an eligible order at checkout. Select “Use 100 points” before placing your order."
+              : `Earn ${100 - available} more points to unlock ₱20 off. Points are credited only after staff verifies payment.`;
+          checkout.textContent = "Go to checkout";
+          checkout.disabled = !cart.length;
+          if (!cart.length)
+            note.textContent += " Add items to your cart before proceeding to checkout.";
+        }
+        document.getElementById("loyaltyBackdrop").classList.add("show");
+      }
+      function closeLoyalty() {
+        document.getElementById("loyaltyBackdrop").classList.remove("show");
+      }
+      function goToLoyaltyCheckout() {
+        closeLoyalty();
+        if (!profile.loggedIn) {
+          openAuth("login");
+          return;
+        }
+        if (cart.length) openCheckout();
+      }
+      function accountAction() {
+        if (profile.loggedIn) logoutCustomer();
+        else openAuth("login");
+      }
+      async function logoutCustomer() {
+        try {
+          await api("/api/auth/logout", { method: "POST" });
+          profile.loggedIn = false;
+          cart = [];
+          await loadProfile();
+          renderCart();
+        } catch (e) {
+          alert(e.message);
+        }
+      }
+      function openProfileSettings() {
+        if (!profile.loggedIn) {
+          openAuth("login");
+          return;
+        }
+        document.getElementById("editCaffeine").value = profile.caffeineLimit;
+        document.getElementById("editCalories").value = profile.calorieGoal;
+        document.getElementById("editLactose").checked = profile.lactoseIntolerant;
+        const t = totals();
+        document.getElementById("profileOrderSnapshot").textContent =
+          `${cart.length} items · ${t.caffeine} mg caffeine · ${t.calories} kcal. Based on current cart, not daily intake.`;
+        document.getElementById("profileError").textContent = "";
+        document.getElementById("profileBackdrop").classList.add("show");
+      }
+      function resetHealthForm() {
+        document.getElementById("editCaffeine").value = 400;
+        document.getElementById("editCalories").value = 2000;
+        document.getElementById("editLactose").checked = false;
+        document.getElementById("profileError").textContent =
+          "Defaults loaded. Click Save preferences to store them.";
+      }
+      function closeProfileSettings() {
+        document.getElementById("profileBackdrop").classList.remove("show");
+      }
+      async function saveProfileSettings(event) {
+        event.preventDefault();
+        const btn = document.getElementById("profileSave"),
+          err = document.getElementById("profileError");
+        const values = {
+          caffeineLimit: Number(document.getElementById("editCaffeine").value),
+          calorieGoal: Number(document.getElementById("editCalories").value),
+          lactoseIntolerant: document.getElementById("editLactose").checked,
+        };
+        btn.disabled = true;
+        err.textContent = "";
+        try {
+          await api("/api/customers/me", { method: "PUT", body: JSON.stringify(values) });
+          await loadProfile();
+          renderCart();
+          closeProfileSettings();
+        } catch (e) {
+          err.textContent = e.message;
+        } finally {
+          btn.disabled = false;
+        }
+      }
+      let csrfToken = "";
+      async function parseJsonResponse(response) {
+        const raw = await response.text();
+        const type = response.headers.get("content-type") || "";
+        if (!type.toLowerCase().includes("application/json")) {
+          if (raw.trim().startsWith("<"))
+            throw new Error(
+              "The server returned HTML instead of API data. Run the Spring Boot backend and open http://localhost:8080/ (not Live Server :5500).",
+            );
+          throw new Error(
+            "API response was not JSON (HTTP " +
+              response.status +
+              "). Verify your backend is running.",
+          );
+        }
+        let data;
+        try {
+          data = JSON.parse(raw);
+        } catch (e) {
+          throw new Error("The server returned invalid JSON. Check backend logs.");
+        }
+        if (!response.ok)
+          throw new Error(
+            data.error || data.message || "Request failed (HTTP " + response.status + ")",
+          );
+        return data;
+      }
+      async function csrf() {
+        let response;
+        try {
+          response = await fetch("/api/auth/csrf", {
+            credentials: "same-origin",
+            headers: { Accept: "application/json" },
+          });
+        } catch (e) {
+          throw new Error(
+            "Cannot reach the Bangon backend. Start Spring Boot and visit http://localhost:8080/.",
+          );
+        }
+        const d = await parseJsonResponse(response);
+        if (!d.token) throw new Error("The backend did not provide a CSRF token.");
+        csrfToken = d.token;
+      }
+      async function api(path, options = {}) {
+        const method = (options.method || "GET").toUpperCase();
+        if (method !== "GET" && !csrfToken) await csrf();
+        let response;
+        try {
+          response = await fetch(path, {
+            ...options,
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              ...(method !== "GET" ? { "X-XSRF-TOKEN": csrfToken } : {}),
+              ...(options.headers || {}),
+            },
+          });
+        } catch (e) {
+          throw new Error(
+            "Cannot reach the Bangon backend. Start Spring Boot and visit http://localhost:8080/.",
+          );
+        }
+        if (response.status === 403 && method !== "GET") csrfToken = "";
+        return parseJsonResponse(response);
+      }
+      async function loadMenu() {
+        try {
+          const [menu, categories] = await Promise.all([
+            api("/api/products"),
+            api("/api/categories"),
+          ]);
+          if (!Array.isArray(menu) || !Array.isArray(categories))
+            throw new Error("The menu API returned an unexpected format.");
+          products = menu;
+          categoryLabels = categories;
+          await loadProfile();
+          renderAll();
+        } catch (e) {
+          document.getElementById("categoryTitle").textContent = "Menu unavailable";
+          document.getElementById("productGrid").textContent = e.message;
+        }
+      }
+      function renderAll() {
+        renderCategories();
+        renderProducts();
+        renderCart();
+        document.getElementById("profileName").textContent = profile.name;
+        document.getElementById("loginStatus").textContent = profile.loggedIn
+          ? "Signed in"
+          : "Guest order";
+        renderProfile();
+      }
+
+      function renderCategories() {
+        const nav = document.getElementById("categoryNav");
+        nav.innerHTML = categoryLabels
+          .map(
+            (c) =>
+              `<button class="category ${c === activeCategory ? "active" : ""}" onclick="setCategory('${c}')">${c}</button>`,
+          )
+          .join("");
+        document.getElementById("categoryTitle").textContent = activeCategory;
+      }
+
+      function setCategory(category) {
+        activeCategory = category;
+        renderCategories();
+        renderProducts();
+      }
+
+      function setNutritionFilter(type) {
+        nutritionFilter = type;
+        ["all", "caffeine", "calories"].forEach((k) =>
+          document
+            .getElementById("filter" + k[0].toUpperCase() + k.slice(1))
+            .classList.toggle("active", nutritionFilter === k),
+        );
+        renderProducts();
+      }
+      function renderProducts() {
+        const q = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
+        const list = products.filter(
+          (p) =>
+            p.category === activeCategory &&
+            (!q || p.name.toLowerCase().includes(q)) &&
+            (nutritionFilter === "all" ||
+              (nutritionFilter === "caffeine" && Number(p.caffeine) <= 80) ||
+              (nutritionFilter === "calories" && Number(p.calories) <= 150)),
+        );
+
+        document.getElementById("productGrid").innerHTML =
+          list
+            .map(
+              (p) => `
+    <article class="product-card">
+      <div class="product-photo">
+        <img
+          src="${p.image}"
+          alt="${p.name}"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80';"
+        >
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-meta">${p.caffeine} mg caffeine<br>${p.calories} kcal</div>
+        <div class="product-bottom">
+          <div class="product-price">${money(p.price)}</div>
+          <button class="add" onclick="selectProduct(${p.id})">+ Add</button>
+        </div>
+      </div>
+    </article>
+  `,
+            )
+            .join("") || `<div class="empty" style="grid-column:1/-1">No items found.</div>`;
+      }
+
+      function selectProduct(id) {
+        selectedProduct = products.find((p) => p.id === id);
+        if (selectedProduct.pastry) {
+          cart.push({
+            productId: selectedProduct.id,
+            choices: null,
+            name: selectedProduct.name,
+            price: selectedProduct.price,
+            caffeine: selectedProduct.caffeine,
+            calories: selectedProduct.calories,
+            details: "1 item",
+          });
+          renderCart();
+          return;
+        }
+
+        document.getElementById("modalProductName").textContent = selectedProduct.name;
+        document.getElementById("sizeSelect").value = "medium";
+        document.getElementById("milkSelect").value = "whole";
+        document.getElementById("sweetSelect").value = "100";
+        document.getElementById("extraShot").checked = false;
+        document.getElementById("caramelAdd").checked = false;
+        document.getElementById("creamAdd").checked = false;
+        updateCustomization();
+        document.getElementById("customModal").classList.add("show");
+      }
+
+      function closeCustomize() {
+        document.getElementById("customModal").classList.remove("show");
+      }
+
+      function currentChoices() {
+        return {
+          size: document.getElementById("sizeSelect").value,
+          milk: document.getElementById("milkSelect").value,
+          sweetness: Number(document.getElementById("sweetSelect").value),
+          extraShot: document.getElementById("extraShot").checked,
+          caramel: document.getElementById("caramelAdd").checked,
+          cream: document.getElementById("creamAdd").checked,
+        };
+      }
+      function customizationValues() {
+        const size = document.getElementById("sizeSelect").value;
+        const milk = document.getElementById("milkSelect").value;
+        const sweet = Number(document.getElementById("sweetSelect").value);
+        const extraShot = document.getElementById("extraShot").checked;
+        const caramel = document.getElementById("caramelAdd").checked;
+        const cream = document.getElementById("creamAdd").checked;
+
+        let price = selectedProduct.price;
+        let caffeine = selectedProduct.caffeine;
+        let calories = selectedProduct.calories;
+
+        if (size === "small") {
+          price -= 15;
+          caffeine *= 0.85;
+          calories *= 0.85;
+        }
+        if (size === "large") {
+          price += 25;
+          caffeine *= 1.2;
+          calories *= 1.2;
+        }
+
+        if (milk === "oat" || milk === "almond") price += 20;
+        if (milk === "oat") calories += 20;
+        if (milk === "almond") calories += 10;
+
+        calories *= 0.72 + 0.28 * (sweet / 100);
+
+        if (extraShot) {
+          price += 30;
+          caffeine += 65;
+          calories += 5;
+        }
+        if (caramel) {
+          price += 20;
+          calories += 60;
+        }
+        if (cream) {
+          price += 20;
+          calories += 80;
+        }
+
+        return {
+          size,
+          milk,
+          sweet,
+          extraShot,
+          caramel,
+          cream,
+          price: Math.round(price),
+          caffeine: Math.round(caffeine),
+          calories: Math.round(calories),
+        };
+      }
+
+      async function updateCustomization() {
+        if (!selectedProduct) return;
+        let v = customizationValues();
+        try {
+          v = await api("/api/quote", {
+            method: "POST",
+            body: JSON.stringify({
+              productId: selectedProduct.id,
+              quantity: 1,
+              choices: currentChoices(),
+            }),
+          });
+        } catch (e) {
+          document.getElementById("allergenMessage").textContent =
+            "Price unavailable: " + e.message;
+          return;
+        }
+        document.getElementById("modalPrice").textContent = money(v.price);
+        document.getElementById("modalCaffeine").textContent = v.caffeine;
+        document.getElementById("modalCalories").textContent = v.calories;
+        const choice = currentChoices();
+        const projected = {
+          caffeine: totals().caffeine + Number(v.caffeine),
+          calories: totals().calories + Number(v.calories),
+        };
+        const advice = [];
+        if (profile.loggedIn) {
+          if (projected.caffeine > profile.caffeineLimit)
+            advice.push(
+              "Adding this drink would exceed your preferred caffeine limit. Try a small size or remove the extra espresso shot.",
+            );
+          else if (profile.caffeineLimit > 0 && projected.caffeine >= profile.caffeineLimit * 0.8)
+            advice.push("This drink brings your cart near your caffeine target.");
+          if (projected.calories > profile.calorieGoal)
+            advice.push(
+              "Adding this drink would exceed your calorie goal. Consider fewer add-ons or a smaller size.",
+            );
+          else if (profile.calorieGoal > 0 && projected.calories >= profile.calorieGoal * 0.8)
+            advice.push("Your selected drinks are approaching your calorie goal.");
+          if (profile.lactoseIntolerant && (choice.milk === "whole" || choice.cream))
+            advice.push(
+              "This selection may contain dairy. Switch whole milk to oat/almond and remove whipped cream if appropriate. Confirm ingredients with staff.",
+            );
+        }
+        document.getElementById("customHealthAdvice").innerHTML = advice
+          .map((x) => `<div class="notice warn">${escapeText(x)}</div>`)
+          .join("");
+
+        const box = document.getElementById("allergenMessage");
+        if (profile.loggedIn && profile.lactoseIntolerant && currentChoices().milk === "whole") {
+          box.innerHTML = `<div class="notice alert">Your profile is marked lactose intolerant. You can switch to oat or almond milk.</div>`;
+        } else if (profile.loggedIn && profile.lactoseIntolerant) {
+          box.innerHTML = `<div class="notice good">This milk choice matches your saved allergen preference.</div>`;
+        } else {
+          box.innerHTML = "";
+        }
+      }
+
+      async function addCustomizedItem() {
+        let v;
+        try {
+          v = await api("/api/quote", {
+            method: "POST",
+            body: JSON.stringify({
+              productId: selectedProduct.id,
+              quantity: 1,
+              choices: currentChoices(),
+            }),
+          });
+        } catch (e) {
+          alert(e.message);
+          return;
+        }
+
+        const milkLabel = v.milk.charAt(0).toUpperCase() + v.milk.slice(1);
+        const addOns = [
+          v.extraShot ? "extra shot" : "",
+          v.caramel ? "caramel syrup" : "",
+          v.cream ? "whipped cream" : "",
+        ].filter(Boolean);
+
+        cart.push({
+          productId: selectedProduct.id,
+          choices: currentChoices(),
+          name: selectedProduct.name,
+          price: v.price,
+          caffeine: v.caffeine,
+          calories: v.calories,
+          details: `${v.size.charAt(0).toUpperCase() + v.size.slice(1)} · ${milkLabel} milk · ${v.sweet}% sweet${addOns.length ? " · " + addOns.join(", ") : ""}`,
+        });
+
+        closeCustomize();
+        renderCart();
+        focusCart();
+      }
+
+      function removeCartItem(index) {
+        cart.splice(index, 1);
+        renderCart();
+      }
+
+      function totals() {
+        return cart.reduce(
+          (t, i) => ({
+            price: t.price + i.price,
+            caffeine: t.caffeine + i.caffeine,
+            calories: t.calories + i.calories,
+          }),
+          { price: 0, caffeine: 0, calories: 0 },
+        );
+      }
+
+      function renderCart() {
+        const t = totals();
+        const items = document.getElementById("cartItems");
+
+        document.getElementById("headerCartCount").textContent = cart.length;
+        document.getElementById("itemCountText").textContent =
+          `${cart.length} item${cart.length === 1 ? "" : "s"}`;
+        document.getElementById("totalCaffeine").textContent = t.caffeine;
+        document.getElementById("totalCalories").textContent = t.calories;
+        document.getElementById("totalPrice").textContent = money(t.price);
+        document.getElementById("discountText").textContent = "₱0.00";
+
+        if (!cart.length) {
+          items.innerHTML = `<div class="empty">Your order is empty.<br>Add something from the menu to get started.</div>`;
+        } else {
+          items.innerHTML = cart
+            .map(
+              (i, index) => `
+      <div class="cart-item">
+        <div class="cart-row">
+          <div>
+            <div class="cart-item-name">${i.name}</div>
+            <small>${i.details}</small>
+            <small>${i.caffeine} mg · ${i.calories} kcal · ${money(i.price)}</small>
+          </div>
+          <button class="remove" onclick="removeCartItem(${index})">×</button>
+        </div>
+      </div>
+    `,
+            )
+            .join("");
+        }
+
+        renderHealthNotices(t);
+        updateNutritionMeters(t);
+      }
+
+      function updateNutritionMeters(t) {
+        [
+          ["Caffeine", t.caffeine, profile.caffeineLimit, "mg"],
+          ["Calorie", t.calories, profile.calorieGoal, "kcal"],
+        ].forEach(([label, val, limit, unit]) => {
+          document.getElementById("cart" + label + "Meter").textContent =
+            `${val.toLocaleString()} / ${Number(limit).toLocaleString()} ${unit}`;
+          const fill = document.getElementById("cart" + label + "Fill");
+          const fraction = Number(limit) > 0 ? val / limit : val > 0 ? 1 : 0;
+          fill.style.width = Math.min(100, fraction * 100) + "%";
+          fill.className =
+            "health-fill" + (fraction > 1 ? " over" : fraction >= 0.8 ? " near" : "");
+        });
+        document.getElementById("cartNutritionNote").textContent = profile.loggedIn
+          ? "Compared with your saved goals. Purchases are not verified as consumed."
+          : "Guest estimates. Sign in to save your personal limits.";
+      }
+      function healthWarnings(t) {
+        if (!profile.loggedIn) return [];
+        const result = [];
+        for (const [label, value, limit, unit] of [
+          ["caffeine", t.caffeine, profile.caffeineLimit, "mg"],
+          ["calories", t.calories, profile.calorieGoal, "kcal"],
+        ]) {
+          if (limit == null) continue;
+          if (value > limit)
+            result.push(
+              `Your cart contains ${value} ${unit} of ${label}, exceeding your preferred ${limit} ${unit} target. Consider a smaller serving or removing an add-on.`,
+            );
+          else if (limit > 0 && value >= limit * 0.8)
+            result.push(
+              `Your cart is approaching your ${label} target (${value} of ${limit} ${unit}).`,
+            );
+        }
+        if (
+          profile.lactoseIntolerant &&
+          cart.some((i) => i.choices?.milk === "whole" || i.choices?.cream)
+        )
+          result.push(
+            "Dairy ingredient selected: whole milk or whipped cream. Consider oat/almond milk and removing whipped cream; check all ingredients with staff.",
+          );
+        return result;
+      }
+      function renderHealthNotices(t) {
+        const notices = healthWarnings(t);
+        document.getElementById("healthNotices").innerHTML = notices
+          .map((x) => `<div class="notice warn">${escapeText(x)}</div>`)
+          .join("");
+      }
+
+      function escapeText(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+        );
+      }
+      async function openOrderHistory() {
+        if (!profile.loggedIn) {
+          openAuth("login");
+          return;
+        }
+        showScreen("historyScreen");
+        await loadOrderHistory();
+      }
+      async function loadOrderHistory() {
+        const el = document.getElementById("historyList");
+        if (!profile.loggedIn) {
+          el.innerHTML = '<div class="empty">Sign in to see your order history.</div>';
+          return;
+        }
+        el.innerHTML = '<div class="empty">Loading your orders…</div>';
+        try {
+          const response = await api("/api/customers/me/orders");
+          const records = Array.isArray(response)
+            ? response
+            : Array.isArray(response.content)
+              ? response.content
+              : Array.isArray(response.orders)
+                ? response.orders
+                : null;
+          if (!records)
+            throw new Error(
+              "Unexpected order history response. The backend API may use a different format.",
+            );
+          if (!records.length) {
+            el.innerHTML =
+              '<div class="empty">You have no orders yet. Your completed orders will appear here.</div>';
+            return;
+          }
+          el.innerHTML = records
+            .map((o) => {
+              const number = escapeText(o.orderNumber ?? o.id ?? "—");
+              const status = escapeText(o.paymentStatus ?? o.status ?? "Pending");
+              const dateValue = o.createdAt ?? o.orderedAt ?? o.createdDate ?? o.orderDate;
+              const date = dateValue ? new Date(dateValue) : null;
+              const dateText = date && !isNaN(date.getTime()) ? date.toLocaleString() : "";
+              const amount = o.total ?? o.totalAmount ?? o.grandTotal;
+              const items = Array.isArray(o.items)
+                ? o.items
+                : Array.isArray(o.orderItems)
+                  ? o.orderItems
+                  : [];
+              const itemText = items.length
+                ? items
+                    .map((i) => {
+                      const name = i.productName ?? i.name ?? i.product?.name ?? "Item";
+                      return escapeText(name) + " × " + escapeText(i.quantity ?? 1);
+                    })
+                    .join(", ")
+                : "Order details available from your receipt";
+              return `<article class="history-order"><div class="history-top"><div><strong>Order #${number}</strong><div class="history-details">${escapeText(dateText)}</div></div><span class="history-state">${status}</span></div><div class="history-details">${itemText}</div><div style="margin-top:12px;font-weight:800">${amount == null ? "" : money(amount)}</div></article>`;
+            })
+            .join("");
+        } catch (e) {
+          el.textContent = "Unable to load your order history: " + e.message;
+        }
+      }
+
+      function focusCart() {
+        document.getElementById("cartPanel").scrollIntoView({ behavior: "smooth" });
+      }
+
+      function openCheckout() {
+        if (!cart.length) {
+          alert("Please add at least one item before checkout.");
+          return;
+        }
+        document.getElementById("usePoints").checked = false;
+        const warnings = healthWarnings(totals());
+        document.getElementById("checkoutHealth").innerHTML = warnings.length
+          ? '<div class="health-card"><h4>Review your health preferences</h4>' +
+            warnings.map((x) => `<div class="notice warn">${escapeText(x)}</div>`).join("") +
+            '<p class="health-caption">These are estimates. You can still continue checkout.</p></div>'
+          : "";
+        renderCheckout();
+        showScreen("checkoutScreen");
+      }
+
+      function selectPayment(btn) {
+        document.querySelectorAll(".pay-option").forEach((x) => x.classList.remove("active"));
+        btn.classList.add("active");
+        paymentMethod = btn.dataset.method;
+      }
+
+      function renderCheckout() {
+        const t = totals();
+        const usePoints = document.getElementById("usePoints")?.checked && profile.points >= 100;
+        const discount = usePoints ? 20 : 0;
+        document.getElementById("checkoutTotal").textContent = money(
+          Math.max(0, t.price - discount),
+        );
+        document.getElementById("checkoutPoints").textContent = profile.points;
+        document.getElementById("loyaltyHint").textContent = !profile.loggedIn
+          ? "Sign in to redeem loyalty points."
+          : profile.points >= 100
+            ? "Choose the checkbox to redeem 100 points for ₱20 off."
+            : `Earn ${100 - Number(profile.points || 0)} more points to redeem ₱20 off.`;
+        document.getElementById("usePoints").disabled = !profile.loggedIn || profile.points < 100;
+      }
+
+      async function placeOrder() {
+        if (!cart.length) return;
+        const btn = document.querySelector(".place-order");
+        if (btn.disabled) return;
+        btn.disabled = true;
+        btn.textContent = "Submitting order...";
+        const key = window.crypto?.randomUUID?.() || "order-" + Date.now() + "-" + Math.random();
+        try {
+          const order = await api("/api/orders", {
+            method: "POST",
+            body: JSON.stringify({
+              items: cart.map((i) => ({ productId: i.productId, quantity: 1, choices: i.choices })),
+              paymentMethod,
+              redeemPoints: profile.loggedIn && document.getElementById("usePoints").checked,
+              idempotencyKey: key,
+            }),
+          });
+          document.getElementById("orderNumber").textContent = "Order #" + order.orderNumber;
+          document.getElementById("paidAmount").textContent = money(order.total);
+          document.getElementById("paidMethod").textContent =
+            order.paymentMethod + " — " + order.paymentStatus;
+          document.getElementById("earnedPoints").textContent =
+            order.pointsEarned + " (after verified payment)";
+          document.querySelector("#confirmationScreen h2").textContent =
+            "Order placed — payment pending";
+          document.querySelector("#confirmationScreen .confirmation-card > p").textContent =
+            "Present your order number at the counter. Card and e-wallet payments require payment-provider verification.";
+          // The backend has accepted this order; it is no longer an active cart.
+          cart = [];
+          renderCart();
+          await loadProfile();
+          showScreen("confirmationScreen");
+        } catch (e) {
+          alert("Could not place order: " + e.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "PLACE ORDER";
+        }
+      }
+
+      function backToMenu() {
+        showScreen("menuScreen");
+        if (!products.length) loadMenu();
+        else renderAll();
+      }
+
+      function newOrder() {
+        // A new order opens the existing menu; do not return to Welcome/Login.
+        cart = [];
+        activeCategory = "Coffee";
+        const search = document.getElementById("searchInput");
+        if (search) search.value = "";
+        showScreen("menuScreen");
+        renderAll();
+        // If the menu was not fetched yet, load it without changing the screen.
+        if (!products.length) loadMenu();
+      }
+
+      renderProfile();
+      renderCart();
+    </script>
+  </body>
+</html>

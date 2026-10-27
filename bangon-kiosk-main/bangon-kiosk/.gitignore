@@ -1,0 +1,19 @@
+@'
+# Java / Maven
+target/
+**/target/
+*.class
+
+# Sensitive data
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials.json
+
+# IDE
+.vscode/
+.idea/
+'@ | Set-Content -Path .gitignore -Encoding utf8
